@@ -119,11 +119,21 @@
   </p>
 
   <p>
-    Use <code>li.steps-done</code> to identify a step as being completed.
+    Use <code>li.current</code> to identify a step as being the current
+    one.
+  </p>
+
+  <p>
+    We recommend adding <code>aria-hidden="true"</code> to the list, as
+    there isn't an easy way to communicate the information to vision-impaired
+    users without being overly verbose (thus annoying the user) or confusing.
+    However, <em>do</em> be sure to repeat the name of the current step
+    elsewhere in a header, so that the user knows what step they're currently
+    on.
   </p>
 
   {% example %}
-  <ol class="steps">
+  <ol class="steps" aria-hidden="true">
     <li>
       <label>Upload price list</label>
     </li>
