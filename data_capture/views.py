@@ -11,6 +11,16 @@ from .schedules import registry
 from frontend import ajaxform
 
 
+def step_ctx(step_number, ctx=None):
+    final_ctx = {
+        'step_number': step_number,
+        'NUM_STEPS': NUM_STEPS
+    }
+    if ctx:
+        final_ctx.update(ctx)
+    return final_ctx
+
+
 def add_generic_form_error(request, form):
     messages.add_message(
         request, messages.ERROR,
@@ -38,11 +48,10 @@ def step_1(request):
 
     return ajaxform.render(
         request,
-        context={
-            'step_number': 1,
+        context=step_ctx(1, {
             'form': form,
             'show_debug_ui': settings.DEBUG and not settings.HIDE_DEBUG_UI
-        },
+        }),
         template_name='data_capture/step_1.html',
         ajax_template_name='data_capture/step_1_form.html',
     )
@@ -67,12 +76,11 @@ def step_2(request, gleaned_data):
         request.session['data_capture:schedule']
     )
 
-    return render(request, 'data_capture/step_2.html', {
-        'step_number': 2,
+    return render(request, 'data_capture/step_2.html', step_ctx(2, {
         'gleaned_data': gleaned_data,
         'is_preferred_schedule': isinstance(gleaned_data, preferred_schedule),
         'preferred_schedule': preferred_schedule,
-    })
+    }))
 
 
 @login_required
@@ -103,13 +111,19 @@ def step_3(request, gleaned_data):
         else:
             add_generic_form_error(request, form)
 
-    return render(request, 'data_capture/step_3.html', {
-        'step_number': 3,
+    return render(request, 'data_capture/step_3.html', step_ctx(3, {
         'form': form
-    })
+    }))
 
 
 def step_4(request):
-    return render(request, 'data_capture/step_4.html', {
-        'step_number': 4
-    })
+    return render(request, 'data_capture/step_4.html', step_ctx(4))
+
+
+def get_num_steps():
+    for i in range(1, 999):
+        if 'step_%d' % i not in globals():
+            return i - 1
+
+
+NUM_STEPS = get_num_steps()
