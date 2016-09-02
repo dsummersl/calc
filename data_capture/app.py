@@ -4,7 +4,7 @@ import django_rq
 
 from . import periodic_jobs
 
-# https://github.com/ui/django-rq/issues/42#issuecomment-131505434
+
 class DataCaptureAppConfig(AppConfig):
     name = 'data_capture'
     verbose_name = 'CALC Data Capture'
@@ -19,11 +19,11 @@ class DataCaptureAppConfig(AppConfig):
         #  Because the ready() method will be run for each insantiation
         #  of the app (ie, app, rqworker, and rqscheduler)
         #  we first cancel all of the scheduled jobs
+        # ref: https://github.com/ui/django-rq/issues/42#issuecomment-131505434
         for job in scheduler.get_jobs():
             scheduler.cancel(job)
 
         # The last app instantiation's scheduler will have this cron job
         # scheduled and not deleted
         scheduler.cron(self.admin_reminder_cron,
-                       periodic_jobs.test,
-                       args=['CRONMAN'])
+                       periodic_jobs.send_admin_approval_reminder_email)
