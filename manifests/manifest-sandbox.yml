@@ -26,3 +26,11 @@ applications:
   timeout: 180
   env:
     EMAIL_URL: 'console:'
+- name: calc-rqscheduler
+  no-route: true
+  instances: 1
+  memory: 256M
+  buildpack: python_buildpack
+  command: python manage.py rqscheduler
+  stack: cflinuxfs2
+  timeout: 180

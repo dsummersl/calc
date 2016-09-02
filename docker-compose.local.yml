@@ -13,3 +13,6 @@ gulp:
 rq_worker:
   volumes:
     - .:/calc
+rq_scheduler:
+  volumes:
+    - .:/calc

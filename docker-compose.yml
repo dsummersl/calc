@@ -23,3 +23,11 @@ rq_worker:
     - db
     - redis
   command: python manage.py rqworker
+rq_scheduler:
+  extends:
+    file: docker-services.yml
+    service: base_app
+  links:
+    - db
+    - redis
+  command: python manage.py rqscheduler
