@@ -19,6 +19,11 @@ class DataCaptureSchedulerApp(AppConfig):
     def ready(self):
         scheduler = django_rq.get_scheduler(self.rq_queue_name)
 
+        # Cancel any jobs already in the scheduler. Jobs can be left dangling
+        # from any restart of this custom AppConfig.
+        for job in scheduler.get_jobs():
+            scheduler.cancel(job)
+
         # Add cron-type job to send a reminder email to the CALC admins
         # about approving price lists
         logger.info('Adding send_admin_approval_reminder_email job on cron \
