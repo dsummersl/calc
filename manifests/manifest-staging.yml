@@ -35,3 +35,5 @@ applications:
   command: python manage.py rqscheduler
   stack: cflinuxfs2
   timeout: 180
+  env:
+    IS_RQ_SCHEDULER: "yup"

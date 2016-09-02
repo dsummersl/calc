@@ -31,3 +31,5 @@ rq_scheduler:
     - db
     - redis
   command: python manage.py rqscheduler
+  environment:
+    - IS_RQ_SCHEDULER=yup

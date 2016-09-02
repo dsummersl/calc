@@ -272,6 +272,15 @@ LOGIN_URL = 'uaa_client:login'
 
 LOGIN_REDIRECT_URL = '/'
 
+# Add the custom rq_scheduler version of the data_capture cap
+# when IS_RQ_SCHEDULER is in the env
+IS_RQ_SCHEDULER = 'IS_RQ_SCHEDULER' in os.environ
+if IS_RQ_SCHEDULER:
+    # First remove the 'regular' data_capture app
+    INSTALLED_APPS = tuple(x for x in INSTALLED_APPS
+                           if x != 'data_capture')
+    INSTALLED_APPS += ('data_capture.apps.DataCaptureSchedulerApp',)
+
 if DEBUG:
     INSTALLED_APPS += ('fake_uaa_provider',)
 
