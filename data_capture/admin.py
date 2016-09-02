@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.contrib import messages
 
-import data_capture.email as email
+from . import email
 from .schedules import registry
 from .models import SubmittedPriceList, SubmittedPriceListRow
 

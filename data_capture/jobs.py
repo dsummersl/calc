@@ -5,7 +5,7 @@ from django.core.files.base import ContentFile
 from django.db import transaction
 from django_rq import job
 
-import data_capture.email as email
+from . import email
 from .r10_spreadsheet_converter import Region10SpreadsheetConverter
 from contracts.loaders.region_10 import Region10Loader
 from contracts.models import Contract, BulkUploadContractSource

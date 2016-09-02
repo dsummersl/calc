@@ -2,7 +2,7 @@ from django.core import mail
 from django.conf import settings
 from django.test import override_settings
 
-import data_capture.email as email
+from .. import email
 from .common import create_bulk_upload_contract_source, FAKE_SCHEDULE
 from .test_models import ModelTestCase
 
