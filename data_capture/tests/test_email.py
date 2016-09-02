@@ -1,6 +1,7 @@
 from django.core import mail
 from django.conf import settings
 from django.test import override_settings
+from django.contrib.auth.models import User
 
 from .. import email
 from .common import create_bulk_upload_contract_source, FAKE_SCHEDULE
@@ -70,11 +71,15 @@ class EmailTests(ModelTestCase):
 
     @override_settings(ADMIN_EMAIL='admin@localhost')
     def test_approval_reminder(self):
+        User.objects.create_superuser('admin', 'admin@localhost', 'password')
+        User.objects.create_superuser('admin2', 'admin2@localhost', 'password')
+        User.objects.create_superuser('blankadmin', '', 'password')
         count = 5
         result = email.approval_reminder(count)
         self.assertTrue(result.was_successful)
         message = mail.outbox[0]
-        self.assertEqual(message.recipients(), [settings.ADMIN_EMAIL])
+        self.assertEqual(message.recipients(),
+                         ['admin@localhost', 'admin2@localhost'])
         self.assertEqual(
             message.subject,
             'CALC Reminder - {} price lists not approved'.format(count)
