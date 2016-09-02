@@ -1,0 +1,4 @@
+
+This is your periodic reminder to check on and approve submitted price lists in CALC.
+
+There are currently {{ count_not_approved }} price lists that have not been approved.

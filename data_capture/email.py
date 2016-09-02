@@ -96,3 +96,24 @@ def bulk_upload_failed(upload_source, traceback):
         was_successful=result is 1,
         context=ctx
     )
+
+
+def approval_reminder(count_not_approved):
+    ctx = {
+        'count_not_approved': count_not_approved
+    }
+    result = send_mail(
+        subject='CALC Reminder - {} price lists not approved'.format(
+            count_not_approved),
+        message=render_to_string(
+            'data_capture/email/approval_reminder.txt',
+            ctx
+        ),
+        from_email=settings.SYSTEM_EMAIL_ADDRESS,
+        # TODO: perhaps instead grab list of superusers?
+        recipient_list=[settings.ADMIN_EMAIL]
+    )
+    return EmailResult(
+        was_successful=result is 1,  # or count of superusers
+        context=ctx
+    )

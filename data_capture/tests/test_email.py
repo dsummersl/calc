@@ -67,3 +67,17 @@ class EmailTests(ModelTestCase):
             'CALC Region 10 bulk data results - upload #{}'.format(src.pk))
         self.assertEqual(message.from_email, settings.SYSTEM_EMAIL_ADDRESS)
         self.assertEqual(result.context['traceback'], 'traceback_contents')
+
+    @override_settings(ADMIN_EMAIL='admin@localhost')
+    def test_approval_reminder(self):
+        count = 5
+        result = email.approval_reminder(count)
+        self.assertTrue(result.was_successful)
+        message = mail.outbox[0]
+        self.assertEqual(message.recipients(), [settings.ADMIN_EMAIL])
+        self.assertEqual(
+            message.subject,
+            'CALC Reminder - {} price lists not approved'.format(count)
+        )
+        self.assertEqual(message.from_email, settings.SYSTEM_EMAIL_ADDRESS)
+        self.assertEqual(result.context['count_not_approved'], count)
